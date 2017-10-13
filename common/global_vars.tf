@@ -1,14 +1,10 @@
-# Region variables
+# AWS region variable
 variable "region" {
   description = "AWS region to launch servers"
   default = "eu-central-1"
 }
 
-# AWS auth variables
-variable "access_key" {}
-variable "secret_key" {}
-
-# AMI Definitions
+# AWS machine images to region mapping
 variable "amis" {
   type = "map"
   default = {
@@ -16,22 +12,24 @@ variable "amis" {
   }
 }
 
-# AWS instance type definition
+# AWS instance type to environment mapping
 variable "aws_instance_type" {
   type = "map"
   default = {
      "test" = "t2.micro"
+     "dev" = "t2.micro"
      "production" = "m4.large"
   }
 }
 
+# Public key path and name (down below)
 variable "public_key_path" {
-  description = <<DESCRIPTION
+  description = <<PATH_DESC
 Path to the SSH public key to be used for authentication.
 Ensure this keypair is added to your local SSH agent so provisioners can
 connect.
-Example: ~/.ssh/terraform.pub
-DESCRIPTION
+Example: ~/.ssh/terraform-nextcloud-key.pub
+PATH_DESC
 }
 
 variable "key_name" {
