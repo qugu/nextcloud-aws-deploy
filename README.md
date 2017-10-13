@@ -23,7 +23,9 @@ Some Ansible requirements:
 This project is under development. Alpha stage, don't run it, bro!
 
 Usage:
-1. Create a keypair with ssh-keygen.
-2. Run terraform specifying the desired keypair name in AWS and the path to your new public key. In example:
+1. Create a keypair with ssh-keygen on Linux.
+2. Edit `init/backend.tf` and comment out `terraform {}` block. Rename bucket in `bucket =` to a unique value.
+3. Run terraform specifying the desired keypair name in AWS and the path to your new public key. In example:
 $ terraform plan -var 'key_name=terraform-nextcloud-keypair' -var 'public_key_path=~/.ssh/terraform-nextcloud-rsa.pub' -out "nx.plan"
 $ terraform apply "nx-plan.plan"
+4. Uncomment change done in step 2 to enable a remote backend in AWS S3.
