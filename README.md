@@ -1,5 +1,6 @@
 # nextcloud-aws-deploy
 Terraform and Ansible configurations to roll-out a mid-size Nextcloud deployment in AWS
+(https://docs.nextcloud.com/server/11/admin_manual/installation/deployment_recommendations.html#mid-sized-enterprises)
 
 This is a personal assessment project. Some hard requirements and stuff to think about:
 
