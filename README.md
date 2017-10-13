@@ -1,12 +1,28 @@
 # nextcloud-aws-deploy
-Terraform and Ansible templates to roll-out a mid-size Nextcloud deployment in AWS
+Terraform and Ansible configurations to roll-out a mid-size Nextcloud deployment in AWS
 
-This project is under development. Alpha stage, doesn't work.
+This is a personal assessment project. Some hard requirements and stuff to think about:
 
-Some pointers:
-- "common" is a directory for generic configuration files
-- [dev|test|prod] specifies environment specific directories
-- common/secrets.tfvars specifies a file with amazon credentials in format:
-    # Authentication on AWS
-    variable "access_key" = ""
-    variable "secret_key"  = ""
+* Multiple environments (test/dev/prod)
+* Must support EC2, RDS, ELB, Security Groups, S3, CloudWatch Alerts
+* Modular structure for everything possible
+* File/directory layout best practices
+* Secrets management made wisely
+* Add/remove components 1-by-1
+* Storing state remotely (remote state)
+* Must support terraform outputs
+
+Some Ansible requirements:
+
+* AWS as Ansible inventory
+* Conflict resolution? Application deployment? 
+* How to test code? How to rollback?
+* File/directory layout best practices
+
+This project is under development. Alpha stage, don't run it, bro!
+
+Usage:
+1. Create a keypair with ssh-keygen.
+2. Run terraform specifying the desired keypair name in AWS and the path to your new public key. In example:
+$ terraform plan -var 'key_name=terraform-nextcloud-keypair' -var 'public_key_path=~/.ssh/terraform-nextcloud-rsa.pub' -out "nx.plan"
+$ terraform apply "nx-plan.plan"
