@@ -42,4 +42,5 @@ variable "key_name" {
   description = <<KEY_NAME_DESC
 Name of the keypair being created. Example: terraform-nextcloud-key
 KEY_NAME_DESC
+  default = "terraform-nextcloud-keypair"
 }
