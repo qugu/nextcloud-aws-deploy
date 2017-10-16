@@ -2,7 +2,7 @@
 resource "aws_security_group" "elb" {
   name        = "terraform_example_elb"
   description = "Used in the terraform"
-  vpc_id      = "${aws_vpc.default.id}"
+  vpc_id      = "${module.vpc.vpc_id}"
 
   # HTTP access from anywhere
   ingress {
@@ -26,7 +26,7 @@ resource "aws_security_group" "elb" {
 resource "aws_security_group" "default" {
   name        = "terraform_example"
   description = "Used in the terraform"
-  vpc_id      = "${aws_vpc.default.id}"
+  vpc_id      = "${module.vpc.vpc_id}"
 
   # SSH access from anywhere
   ingress {
