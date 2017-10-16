@@ -30,6 +30,12 @@ Ensure this keypair is added to your local SSH agent so provisioners can
 connect.
 Example: ~/.ssh/terraform-nextcloud-key.pub
 PATH_DESC
+  default = "~/.ssh/terraform-nextcloud-rsa.pub"
+}
+
+variable "private_key_path" {
+  description = "Path to private key for instance bootstrapping"
+  default = "~/.ssh/terraform-nextcloud-rsa"
 }
 
 variable "key_name" {

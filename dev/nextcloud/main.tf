@@ -23,70 +23,44 @@ resource "aws_efs_file_system" "nextcloud-fs" {
   creation_token = "nextcloud-fs"
 }
 
-
-/* module "nextcloud-asg-front" {
+module "nextcloud-asg-front" {
   source = "../../modules/nextcloud-asg-front"
-} */
 
-resource "aws_instance" "web_server_1" {
-  ami           = "${lookup(var.amis, var.region)}"
-  instance_type = "${var.aws_instance_type["test"]}"
-  vpc_security_group_ids = ["${aws_security_group.default.id}"]
-  key_name = "${aws_key_pair.auth.id}"
-  subnet_id = "${module.vpc.public_subnets[0]}"
-  depends_on = ["aws_efs_file_system.nextcloud-fs"]
-  depends_on = ["aws_subnet.default"]
+  ec2_ami = "${lookup(var.amis, var.region)}"
+  ec2_region = "${var.region}"
+  ec2_instance_type = "${var.aws_instance_type["test"]}"
+  ec2_vpc_sec_group = "${aws_security_group.default.id}"
+  ec2_vpc_subnet_id = "${module.vpc.public_subnets[0]}"
+  ec2_ssh_key_name = "${aws_key_pair.auth.id}"
+  elb_vpc_security_group = "${aws_security_group.elb.id}"
+  elb_vpc_subnets = "${module.vpc.public_subnets[0]}"
+}
 
-# Do bootstrapping with Ansible here
+/*
+# Let's do some bootstrapping here
+
+resource "null_resource" "bootstrap" {
+  # Changes to any instance of the cluster requires re-provisioning
+  triggers {
+    cluster_instance_ids = "${join (",", module.nextcloud-asg-front.id)}"
+  }
+
+  # Bootstrap script can run on any instance of the cluster
+  # So we just choose the first in this case
+  connection {
+    host = "${module.nextcloud-asg-front.public_ip[0]}"
+    user = "ubuntu"
+    type = "ssh"
+    private_key = "${file(var.private_key_path)}"
+  }
+
   provisioner "remote-exec" {
+    # Bootstrap script called with private_ip of each node in the clutser
     inline = [
       "sudo apt-get -y update",
       "sudo apt-get -y install nginx",
       "sudo service nginx start",
     ]
   }
-
 }
-
-
-resource "aws_instance" "web_server_2" {
-  ami           = "${lookup(var.amis, var.region)}"
-  instance_type = "${var.aws_instance_type["test"]}"
-  vpc_security_group_ids = ["${aws_security_group.default.id}"]
-  key_name = "${aws_key_pair.auth.id}"
-
-  subnet_id = "${module.vpc.public_subnets[0]}"
-  depends_on = ["aws_efs_file_system.nextcloud-fs"]
-  depends_on = ["aws_subnet.default"]
-
-# Do bootstrapping with Ansible here
-  provisioner "remote-exec" {
-    inline = [
-      "sudo apt-get -y update",
-      "sudo apt-get -y install nginx",
-      "sudo service nginx start",
-    ]
-  }
-
-}
-
-
-resource "aws_elb" "nextcloud-external-lb" {
-  name               = "nextcloud-external-lb"
-  subnets         = ["${module.vpc.public_subnets[0]}"]
-  security_groups = ["${aws_security_group.elb.id}"]
-  depends_on = [ "aws_instance.web_server_2", "aws_instance.web_server_1"]
-
-  listener {
-    instance_port      = 80
-    instance_protocol  = "http"
-    lb_port            = 80
-    lb_protocol        = "http"
-  }
-
-  instances                   = [ "${aws_instance.web_server_2.id}", "${aws_instance.web_server_1.id}" ]
-  cross_zone_load_balancing   = false
-  idle_timeout                = 400
-  connection_draining         = true
-  connection_draining_timeout = 400
-}
+*/

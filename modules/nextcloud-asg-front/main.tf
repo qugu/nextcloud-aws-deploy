@@ -24,29 +24,20 @@ module "ec2_cluster" {
   name  = "nextcloud-cluster"
   count = 2
   
-  ami                    = "${lookup(var.amis, var.region)}"
-  instance_type          = "${var.aws_instance_type["test"]}"
-  key_name               = "${aws_key_pair.auth.id}"
+  ami                    = "${var.ec2_ami}"
+  instance_type          = "${var.ec2_instance_type}"
+  key_name               = "${var.ec2_ssh_key_name}"
   monitoring             = true
-  vpc_security_group_ids = ["${aws_security_group.default.id}"]
-  subnet_id = "${module.vpc.public_subnets[0]}"
-  depends_on = ["aws_efs_file_system.nextcloud-fs"]
-  depends_on = ["aws_subnet.default"]
-  provisioner "remote-exec" {
-    inline = [
-      "sudo apt-get -y update",
-      "sudo apt-get -y install nginx",
-      "sudo service nginx start",
-    ]
-  }
+  vpc_security_group_ids = ["${var.ec2_vpc_sec_group}"]
+  associate_public_ip_address = true
+  subnet_id = "${var.ec2_vpc_subnet_id}"
 
 }
 
 resource "aws_elb" "nextcloud-external-lb" {
-  name               = "nextcloud-external-lb"
-  subnets         = ["${module.vpc.public_subnets[0]}"]
-  security_groups = ["${aws_security_group.elb.id}"]
-  depends_on = [ "aws_instance.web_server_2", "aws_instance.web_server_1"]
+  name            = "nextcloud-external-lb"
+  subnets         = ["${var.elb_vpc_subnets}"]
+  security_groups = ["${var.elb_vpc_security_group}"]
 
   listener {
     instance_port      = 80
@@ -55,7 +46,7 @@ resource "aws_elb" "nextcloud-external-lb" {
     lb_protocol        = "http"
   }
 
-  instances                   = [ "${aws_instance.web_server_2.id}", "${aws_instance.web_server_1.id}" ]
+  instances                   = [ "${module.ec2_cluster.id}"]
   cross_zone_load_balancing   = false
   idle_timeout                = 400
   connection_draining         = true
