@@ -57,8 +57,8 @@ resource "null_resource" "bootstrap" {
   provisioner "remote-exec" {
     # Bootstrap script called with private_ip of each node in the clutser
     inline = [
-      "sudo apt-get -y update",
-      "sudo apt-get -y install nginx",
+      "sudo apt -y update",
+      "sudo apt -y install nginx",
       "sudo service nginx start",
     ]
   }

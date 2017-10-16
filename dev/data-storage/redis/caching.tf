@@ -3,7 +3,7 @@ data "terraform_remote_state" "nextcloud-aws-state" {
   config {
   region = "eu-central-1"
   bucket = "nextcloud-terraform-test"
-  key = "terraform.tfstate"
+  key = "dev/vpc_state.tfstate"
  }
 }
 resource "aws_elasticache_cluster" "cache" {
