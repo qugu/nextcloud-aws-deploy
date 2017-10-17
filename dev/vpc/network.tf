@@ -1,23 +1,18 @@
-# Create a VPC to launch our instances into
-resource "aws_vpc" "default" {
-  cidr_block = "10.0.0.0/16"
-}
+#
+# A wrapper template for the "vpc" module
+# Let's define and initialize the network for our NextCloud deployment
+#
 
-# Create an internet gateway to give our subnet access to the outside world
-resource "aws_internet_gateway" "default" {
-  vpc_id = "${aws_vpc.default.id}"
-}
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+  name = "nextcloud-vpc-${var.environment}"
+  cidr = "10.0.0.0/16"
+  azs = ["eu-central-1a"]
+  private_subnets = ["10.0.1.0/24"]
+  public_subnets = ["10.0.11.0/24"]
+  database_subnets    = ["10.0.21.0/24"]
+  elasticache_subnets = ["10.0.31.0/24"]
+  create_database_subnet_group = false
+  enable_nat_gateway = true
 
-# Grant the VPC internet access on its main route table
-resource "aws_route" "internet_access" {
-  route_table_id         = "${aws_vpc.default.main_route_table_id}"
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = "${aws_internet_gateway.default.id}"
-}
-
-# Create a subnet to launch our instances into
-resource "aws_subnet" "default" {
-  vpc_id                  = "${aws_vpc.default.id}"
-  cidr_block              = "10.0.1.0/24"
-  map_public_ip_on_launch = true
 }

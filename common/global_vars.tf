@@ -18,7 +18,7 @@ variable "aws_instance_type" {
   default = {
      "test" = "t2.micro"
      "dev" = "t2.micro"
-     "production" = "m4.large"
+     "prod" = "m4.large"
   }
 }
 

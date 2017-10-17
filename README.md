@@ -4,23 +4,25 @@ Terraform and Ansible configurations to roll-out a mid-size Nextcloud deployment
 
 This is a personal assessment project. Some hard requirements and stuff to think about:
 
-* Multiple environments (test/dev/prod)
-* Must support EC2, RDS, ELB, Security Groups, S3, CloudWatch Alerts
-* Modular structure for everything possible
-* File/directory layout best practices
-* Secrets management made wisely
-* Add/remove components 1-by-1
-* Storing state remotely (remote state)
-* Must support terraform outputs
+- [] Multiple environments (test/dev/prod)
+- [] Must support EC2, RDS, ELB, Security Groups, S3, CloudWatch Alerts
+- [x] Modular structure for everything possible
+- [x] File/directory layout best practices
+- [x] Secrets management made wisely
+- [] Add/remove components 1-by-1
+- [x] Storing state remotely (remote state)
+- [x] Must support terraform outputs
 
 Some Ansible requirements:
 
-* AWS as Ansible inventory
-* Conflict resolution? Application deployment? 
-* How to test code? How to rollback?
-* File/directory layout best practices
+- [] AWS as Ansible inventory
+- [] Conflict resolution? Application deployment? 
+- [] How to test code? How to rollback?
+- [] File/directory layout best practices
 
 This project is under development. Alpha stage, don't run it, bro!
+
+In the end we should get a completely working NextCloud deployment.
 
 Usage:
 1. Create a keypair with ssh-keygen on Linux.
