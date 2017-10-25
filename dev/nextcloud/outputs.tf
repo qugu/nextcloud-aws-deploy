@@ -1,7 +1,7 @@
 output "elb_address" {
-  value = "${module.nextcloud-asg-front.elb_public_dns}"
+  value = "${aws_elb.nextcloud-external-lb.dns_name}"
 }
-output "elasticache_subnets" {
-  value = "${module.vpc.elasticache_subnets}"  
+output "efs_dns_name" {
+  value = "${data.aws_efs_file_system.by_id.dns_name}"
 }
 

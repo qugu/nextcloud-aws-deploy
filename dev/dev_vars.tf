@@ -6,6 +6,10 @@ variable "environment" {
   type = "string"
   default = "dev"
 }
+variable "ec2_nodes_number" {
+  type = "string"
+  default = "1"
+}
 variable "caching_nodes_number" {
   type = "string"
   default = "1"

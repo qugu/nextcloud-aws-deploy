@@ -20,7 +20,7 @@ resource "aws_s3_bucket" "nextcloud-aws-state" {
 terraform {
   backend "s3" {
     bucket = "nextcloud-terraform-test"
-    key    = "dev/caching_tier.tfstate"
+    key    = "dev/caching.tfstate"
     region = "eu-central-1"
   }
 } 

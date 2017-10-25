@@ -21,7 +21,8 @@ resource "aws_db_instance" "nextcloud_db" {
   name                 = "nextcloud${var.environment}"
   username             = "nextcloud"
   password             = "supersecret"
-  db_subnet_group_name = "${data.terraform_remote_state.vpc.database_subnets[0]}"
-  multi_az             = "false"
+  db_subnet_group_name = "${data.terraform_remote_state.vpc.database_subnet_group}"
+  multi_az             = "true"
+  skip_final_snapshot  = "true"
 #  parameter_group_name = "default.mysql5.6"
 }

@@ -1,8 +1,8 @@
 # A security group for the ELB so it is accessible via the web
 resource "aws_security_group" "elb" {
-  name        = "terraform_example_elb"
-  description = "Used in the terraform"
-  vpc_id      = "${module.vpc.vpc_id}"
+  name        = "terraform_nextcloud_${var.environment}_elb"
+  description = "Used for the ELBs"
+  vpc_id      = "${data.terraform_remote_state.vpc.vpc_id}"
 
   # HTTP access from anywhere
   ingress {
@@ -21,12 +21,11 @@ resource "aws_security_group" "elb" {
   }
 }
 
-# Our default security group to access
-# the instances over SSH and HTTP
+# Our security group to access the instances over SSH and HTTP
 resource "aws_security_group" "default" {
-  name        = "terraform_example"
-  description = "Used in the terraform"
-  vpc_id      = "${module.vpc.vpc_id}"
+  name        = "terraform_nextcloud_${var.environment}"
+  description = "Used to access instances from various parts of the infra"
+  vpc_id      = "${data.terraform_remote_state.vpc.vpc_id}"
 
   # SSH access from anywhere
   ingress {
